@@ -5,7 +5,7 @@
         public int t1;
         public int t2;
 
-        public string ToString()
+        public override string ToString()
         {
             return t1 + ", " + t2 + "\n";
         }

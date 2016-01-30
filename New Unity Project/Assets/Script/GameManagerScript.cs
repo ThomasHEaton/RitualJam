@@ -11,7 +11,7 @@ namespace Assets.Script
     {
         public GridScript TileGrid;
 
-        public int CurrentTurnNumber;
+        public int CurrentTurnNumber = 1;
 
         public int Souls;
 
@@ -20,12 +20,17 @@ namespace Assets.Script
         public int Not;
         public int Inf;
 
+        public int SoulsRequired;
+        public int PaymentTurn = 10;
+
         public Income PreviousIncome = new Income();
+
+        public TileScript SelectedTile;
+
+        public GameObject EndOfGameObject;
 
         public void EndTurn()
         {
-            CurrentTurnNumber++;
-
             var income = TileGrid.GetIncome();
 
             People += income.People;
@@ -34,6 +39,24 @@ namespace Assets.Script
             Inf += income.Inf;
 
             PreviousIncome = income;
+
+            if (CurrentTurnNumber == PaymentTurn)
+            {
+                Debug.Log(Souls + " of " + SoulsRequired + " Souls");
+                if (Souls >= SoulsRequired)
+                {
+                    Souls -= SoulsRequired;
+                    SoulsRequired *= 2;
+                    PaymentTurn += 10;
+                }
+                else
+                {
+                    EndOfGameObject.SetActive(true);
+                }
+            }
+
+            CurrentTurnNumber++;
+            Debug.Log("Turn " + CurrentTurnNumber + " of " + PaymentTurn);
         }
     }
 }

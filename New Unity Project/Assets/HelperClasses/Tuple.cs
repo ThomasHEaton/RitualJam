@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Assets.HelperClasses
+﻿namespace Assets.HelperClasses
 {
     public class Tuple
     {
         public int t1;
         public int t2;
+
+        public string ToString()
+        {
+            return t1 + ", " + t2 + "\n";
+        }
     }
 }

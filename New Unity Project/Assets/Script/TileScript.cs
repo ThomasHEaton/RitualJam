@@ -1,7 +1,5 @@
-﻿using System;
-using Assets.HelperClasses;
+﻿using Assets.HelperClasses;
 using UnityEngine;
-using System.Collections;
 
 public class TileScript : MonoBehaviour
 {

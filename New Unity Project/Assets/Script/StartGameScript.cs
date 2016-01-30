@@ -1,7 +1,5 @@
 ﻿using Assets.HelperClasses;
-using Assets.Script;
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(GridScript))]
 public class StartGameScript : MonoBehaviour

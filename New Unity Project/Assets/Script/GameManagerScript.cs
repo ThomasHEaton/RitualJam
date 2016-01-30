@@ -9,14 +9,14 @@ namespace Assets.Script
 
         public int CurrentTurnNumber = 1;
 
-        public int Souls;
+        public int Souls = 0;
 
-        public int People;
-        public int Money;
-        public int Not;
-        public int Inf;
+        public int People = 0;
+        public int Money = 0;
+        public int Not = 0;
+        public int Inf = 0;
 
-        public int SoulsRequired;
+        public int SoulsRequired = 10;
         public int PaymentTurn = 10;
 
         public Income PreviousIncome = new Income();

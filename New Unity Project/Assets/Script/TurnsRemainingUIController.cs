@@ -18,7 +18,14 @@ public class TurnsRemainingUIController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+//	    Debug.Log(GameManager);
+//
+//        Debug.Log(GameManager.Souls);
+//	    Debug.Log(GameManager.SoulsRequired);
+//	    Debug.Log(GameManager.PaymentTurn);
+//	    Debug.Log(GameManager.CurrentTurnNumber + 1);
+        
 	    TurnText.text = GameManager.Souls + " of " + GameManager.SoulsRequired + " in " +
-	                    (GameManager.PaymentTurn - GameManager.CurrentTurnNumber) + " turns";
+	                    (GameManager.PaymentTurn - GameManager.CurrentTurnNumber + 1) + " turns";
 	}
 }

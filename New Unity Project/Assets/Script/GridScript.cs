@@ -1,30 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.HelperClasses;
 using UnityEngine;
 
 public class GridScript : MonoBehaviour
 {
-    public GameObject[,] Tiles;
-    public List<Tuple> TileList;
+    public List<TileScript> TileList;
     public List<Tuple> OpenTiles; 
 
     public GameObject TilePrefab;
     
 	// Use this for initialization
 	void Start () {
-	    
-        TileList = new List<Tuple>()
-        {
-            new Tuple(){t1 = 0, t2 = 0}
-        };
-
-        Tiles = new GameObject[1000,1000];
-
+	    TileList = new List<TileScript>();
             
-        OpenTiles = new List<Tuple>()
+        OpenTiles = new List<Tuple>
         {
-            new Tuple(){t1 = -1, t2 = 0}, new Tuple(){t1 = -1, t2 = -1}, new Tuple(){t1 = 0, t2 = -1}, 
-            new Tuple(){t1 = 1, t2 = 0}, new Tuple(){t1 = 0, t2 = 1}, new Tuple(){t1 = -1, t2 = 1}
+            new Tuple{t1 = -1, t2 = 0}, new Tuple{t1 = -1, t2 = -1}, new Tuple{t1 = 0, t2 = -1}, 
+            new Tuple{t1 = 1, t2 = 0},  new Tuple{t1 = 0, t2 = 1},   new Tuple{t1 = -1, t2 = 1}
         };
 	}
 	
@@ -33,21 +26,21 @@ public class GridScript : MonoBehaviour
 	
 	}
 
-    public GameObject GetTile(int tileX, int tileY)
+    public TileScript GetTile(int tileX, int tileY)
     {
-        return Tiles[500 + tileX, 500 + tileY];
+        var tile = TileList.FirstOrDefault(t => t.X == tileX && t.Y == tileY);
+        return tile;
     }
 
     public Tuple GetTileInUnityPosition(int tileX, int tileY)
     {
         // 100 pixels is 1 Unity Unit/
-        return new Tuple(){t1 = 0, t2 = 0};
+        return new Tuple{t1 = 0, t2 = 0};
     }
 
-    public void PlaceTile(GameObject tile, int tileX, int tileY)
+    public void PlaceTile(TileScript tile, int tileX, int tileY)
     {
-        Tiles[500 + tileX, 500 + tileY] = tile;
-        TileList.Add(new Tuple(){t1 = tileX, t2 = tileY});
+        TileList.Add(tile);
     }
 
     public List<Tuple> GetOpenTiles()
@@ -56,55 +49,67 @@ public class GridScript : MonoBehaviour
         return OpenTiles;
     }
 
-    public void AddTile(int tileX, int tileY)
+    // Income Numbers
+    public Income GetIncome()
     {
-        var gameTile = (GameObject) Instantiate(TilePrefab, new Vector3(GetTileInUnityPosition(tileX, tileY).t1,
+        var income = new Income();
+
+        return TileList.Aggregate(income, (current, tile) => current + tile.GetIncome());
+    }
+
+    public void AddTile(int tileX, int tileY, TileInformation tileInformation)
+    {
+        var gameTile = (GameObject)Instantiate(TilePrefab, new Vector3(GetTileInUnityPosition(tileX, tileY).t1,
             GetTileInUnityPosition(tileX, tileY).t2, 0), Quaternion.identity);
 
         var tileScript = gameTile.GetComponent<TileScript>();
+        tileScript.TileInformation = tileInformation;
+
+        tileScript.X = tileX;
+        tileScript.Y = tileY;
 
         tileScript.Grid = this;
 
-        PlaceTile(gameTile, tileX, tileY);
+        PlaceTile(tileScript, tileX, tileY);
 
-        UpdateOpenTiles(tileX, tileY);
+        UpdateOpenTiles(tileScript);
     }
 
-    private void UpdateOpenTiles(int tileX, int tileY)
+    private void UpdateOpenTiles(TileScript tileScript)
     {
-        var placedTile = new Tuple() {t1 = tileX, t2 = tileY};
+        var placedTile = new Tuple{ t1 = tileScript.X, t2 = tileScript.Y };
         if (OpenTiles.Contains(placedTile))
         {
             OpenTiles.Remove(placedTile);
         }
 
-        var t = new Tuple() {t1 = tileX - 1, t2 = tileY + 0};
-        if (!TileList.Contains(t) && !OpenTiles.Contains(t))
+        var t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
-        t = new Tuple() {t1 = tileX - 1, t2 = tileY - 1};
-        if (!TileList.Contains(t) && !OpenTiles.Contains(t))
+        t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y - 1 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
-        t = new Tuple() {t1 = tileX + 0, t2 = tileY - 1};
-        if (!TileList.Contains(t) && !OpenTiles.Contains(t))
+        t = new Tuple{ t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
-        t = new Tuple() {t1 = tileX + 1, t2 = tileY + 0};
-        if (!TileList.Contains(t) && !OpenTiles.Contains(t))
+        t = new Tuple{ t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
-        t = new Tuple() {t1 = tileX + 0, t2 = tileY + 1};
-        if (!TileList.Contains(t) && !OpenTiles.Contains(t))
+        t = new Tuple{ t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
-        t = new Tuple() {t1 = tileX - 1, t2 = tileY + 1};
-        if (!TileList.Contains(t))
+        t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y + 1 };
+        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
         {
             OpenTiles.Add(t);
         }
@@ -112,7 +117,7 @@ public class GridScript : MonoBehaviour
 
     public bool CanAddTile(int tileX, int tileY)
     {
-        if (OpenTiles.Contains(new Tuple() {t1 = tileX, t2 = tileY}))
+        if (OpenTiles.Contains(new Tuple{ t1 = tileX, t2 = tileY }))
         {
             return true;
         }
@@ -122,3 +127,5 @@ public class GridScript : MonoBehaviour
         }
     }
 }
+
+

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.HelperClasses;
 using UnityEngine;
@@ -6,13 +7,17 @@ using UnityEngine;
 public class GridScript : MonoBehaviour
 {
     public List<TileScript> TileList;
+    public List<GameObject> FadeTileList; 
     public List<Tuple> OpenTiles; 
 
     public GameObject TilePrefab;
+    public GameObject FadeTile;
     
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
 	    TileList = new List<TileScript>();
+        FadeTileList = new List<GameObject>();
             
         OpenTiles = new List<Tuple>
         {
@@ -22,9 +27,17 @@ public class GridScript : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+    {
 	}
+
+    public void NextTurn()
+    {
+        foreach (var openTile in OpenTiles)
+        {
+            PlaceFadeTile(openTile);
+        }
+    }
 
     public TileScript GetTile(int tileX, int tileY)
     {
@@ -32,15 +45,34 @@ public class GridScript : MonoBehaviour
         return tile;
     }
 
-    public Tuple GetTileInUnityPosition(int tileX, int tileY)
+    public FloatTuple GetTileInUnityPosition(int tileX, int tileY)
     {
         // 100 pixels is 1 Unity Unit/
-        return new Tuple{t1 = 0, t2 = 0};
+        float xPos = tileX * 2.6f + Math.Abs(tileY % 2) * 1.3f;
+        float yPos = tileY * 2;
+        return new FloatTuple{t1 = xPos, t2 = yPos};
     }
 
     public void PlaceTile(TileScript tile, int tileX, int tileY)
     {
         TileList.Add(tile);
+    }
+
+    public void PlaceFadeTile(Tuple tileLocation)
+    {
+        var fadeTile = (GameObject)Instantiate(FadeTile, new Vector3(GetTileInUnityPosition(tileLocation.t1, tileLocation.t2).t1,
+            GetTileInUnityPosition(tileLocation.t1, tileLocation.t2).t2, 0), Quaternion.identity);
+
+        FadeTileList.Add(fadeTile);
+        
+    }
+
+    public void RemoveFadeTiles()
+    {
+        foreach (var fadeTile in FadeTileList)
+        {
+            Destroy(fadeTile);
+        }
     }
 
     public List<Tuple> GetOpenTiles()
@@ -59,6 +91,8 @@ public class GridScript : MonoBehaviour
 
     public void AddTile(int tileX, int tileY, TileInformation tileInformation)
     {
+        RemoveFadeTiles();
+
         var gameTile = (GameObject)Instantiate(TilePrefab, new Vector3(GetTileInUnityPosition(tileX, tileY).t1,
             GetTileInUnityPosition(tileX, tileY).t2, 0), Quaternion.identity);
 

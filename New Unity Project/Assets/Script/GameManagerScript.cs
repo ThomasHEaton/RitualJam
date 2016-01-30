@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.HelperClasses;
+﻿using Assets.HelperClasses;
 using UnityEngine;
 
 namespace Assets.Script
@@ -57,6 +53,8 @@ namespace Assets.Script
 
             CurrentTurnNumber++;
             Debug.Log("Turn " + CurrentTurnNumber + " of " + PaymentTurn);
+
+            TileGrid.NextTurn();
         }
     }
 }

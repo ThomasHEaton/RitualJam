@@ -2,13 +2,16 @@
 using Assets.HelperClasses;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.VR;
 using UnityEngine.WSA;
 
 public class GridScript : MonoBehaviour
 {
     public TileScript[,] Tiles;
-    public List<TileScript> TileList; 
+    public List<TileScript> TileList;
 
+
+    public Object TilePrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -27,10 +30,10 @@ public class GridScript : MonoBehaviour
         return Tiles[500 + tileX, 500 + tileY];
     }
 
-    public int GetTileInUnityPosition(int tileX, int tileY)
+    public Tuple GetTileInUnityPosition(int tileX, int tileY)
     {
         // 100 pixels is 1 Unity Unit/
-        return 0;
+        return new Tuple() {t1 = 0, t2 = 0};
     }
 
     public Tuple GetOpenTiles()
@@ -38,4 +41,26 @@ public class GridScript : MonoBehaviour
         // Return all of the open buildable spaces on the board.
         return null;
     }
+
+    public void AddTile(int tileX, int tileY, TileInformation tile)
+    {
+        var tileObject = (GameObject)Instantiate(TilePrefab, Vector3.zero, Quaternion.identity);
+        var tileInformation = tileObject.GetComponent<TileScript>();
+        tileInformation.TileInformation = tile;
+
+        TileList.Add(tileObject.GetComponent<TileScript>());
+    }
+
+    // Income Numbers
+    public Income GetIncome()
+    {
+        var income = new Income();
+        foreach (var tile in TileList)
+        {
+            income = income + tile.GetIncome();
+        }
+
+        return income;
+    }
+
 }

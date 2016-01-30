@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.HelperClasses;
 using UnityEngine;
 using System.Collections;
 
@@ -8,17 +9,10 @@ public class TileScript : MonoBehaviour
     public int X;
     public int Y;
 
-    public string TileName;
-    public string TileDescription;
-
-    public int DeltaPeople;
-    public int DeltaMoney;
-    public int DeltaNot;
-    public int DeltaInf;
+    public TileInformation TileInformation;
 
 	// Use this for initialization
 	void Start () {
-
 
 	}
 	
@@ -26,4 +20,9 @@ public class TileScript : MonoBehaviour
 	void Update () {
 	
 	}
+
+    public Income GetIncome()
+    {
+        return new Income() { Soul = TileInformation.DeltaSouls, People = TileInformation.DeltaPeople, Inf = TileInformation.DeltaInf, Money = TileInformation.DeltaMoney, Not = TileInformation.DeltaNot };
+    }
 }

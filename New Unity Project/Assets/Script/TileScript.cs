@@ -4,6 +4,7 @@ using System.Collections;
 
 public class TileScript : MonoBehaviour
 {
+    public GridScript Grid;
 
     public int X;
     public int Y;
@@ -18,12 +19,20 @@ public class TileScript : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-
-
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    
+    void PlaceTile()
+    {
+        
+    }
+
+
+
 }

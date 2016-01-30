@@ -25,7 +25,7 @@ namespace Assets.Script
 
         public Income PreviousIncome = new Income();
 
-        public TileScript SelectedTile;
+        public TileInformation SelectedTile;
 
         public GameObject EndOfGameObject;
 

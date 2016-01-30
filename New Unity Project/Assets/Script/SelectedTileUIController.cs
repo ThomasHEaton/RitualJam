@@ -21,8 +21,8 @@ public class SelectedTileUIController : MonoBehaviour
 
 	    if (GameManager != null && GameManager.SelectedTile != null)
 	    {
-	        TileText.text = GameManager.SelectedTile.GetComponent<TileScript>().TileInformation.TileName;
-            TileDescriptionText.text = GameManager.SelectedTile.GetComponent<TileScript>().TileInformation.TileDescription;
+	        TileText.text = GameManager.SelectedTile.TileName;
+            TileDescriptionText.text = GameManager.SelectedTile.TileDescription;
 	    }
 
 

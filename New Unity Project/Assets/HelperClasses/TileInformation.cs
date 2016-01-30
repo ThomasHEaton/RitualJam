@@ -44,9 +44,8 @@ namespace Assets.HelperClasses
             TileName = "Starting Location";
             TileDescription = "A tiny shack in the woods";
 
-            DeltaPeople = 1;
+            DeltaPeople = 3;
             DeltaMoney = 1;
-            DeltaNot = 1;
             DeltaInf = 1;
         }
     }

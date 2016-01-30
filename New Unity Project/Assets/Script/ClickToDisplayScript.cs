@@ -21,6 +21,6 @@ public class ClickToDisplayScript : MonoBehaviour {
 
         Debug.Log(gameManager);
         Debug.Log(GetComponent<TileScript>());
-        gameManager.GetComponent<GameManagerScript>().SelectedTile = GetComponent<TileScript>();
+        gameManager.GetComponent<GameManagerScript>().SelectedTile = GetComponent<TileScript>().TileInformation;
     }
 }

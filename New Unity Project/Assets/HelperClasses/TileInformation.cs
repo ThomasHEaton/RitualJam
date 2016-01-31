@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Assets.Script;
-using UnityEngine.WSA;
 using Debug = UnityEngine.Debug;
 
 namespace Assets.HelperClasses
@@ -438,97 +436,88 @@ namespace Assets.HelperClasses
         {
             if (tile != _tile) return;
 
-            var TileList = grid.TileList;
+            var tileList = grid.TileList;
             var tileScript = grid.TileList.FirstOrDefault(x => x.TileInformation == tile);
 
-            if (tileScript.Y % 2 == 0)
+            if (tileScript != null)
             {
-                var t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
+                if (tileScript.Y%2 == 0)
                 {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
                 }
-                t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y - 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                else
                 {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
-                if (TileList.Any(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-            }
-            else
-            {
-                var t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y - 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
-                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
-                }
-                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
-                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
-                {
-                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
-                    buffTile.TileInformation.DeltaInf *= 2;
-                    buffTile.TileInformation.DeltaMoney *= 2;
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
+                    if (tileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                    {
+                        var buffTile = tileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                        buffTile.TileInformation.DeltaInf *= 2;
+                        buffTile.TileInformation.DeltaMoney *= 2;
+                    }
                 }
             }
 

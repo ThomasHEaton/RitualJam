@@ -35,7 +35,7 @@ public class PurchasableTileScript : MonoBehaviour
 	        GetComponent<Button>().image.sprite = Resources.Load<Sprite>("Sprites/" + TileInformation.SpriteName);
 	    }
 
-        if (TileInformation != null && !TileInformation.CanAfford(_gameManager))
+	    if (TileInformation != null && !TileInformation.CanAfford(_gameManager))
 	    {
 	        var color = this.GetComponent<Button>().image.color;
 	        color.r = 0.5f;
@@ -44,14 +44,21 @@ public class PurchasableTileScript : MonoBehaviour
 
 	        this.GetComponent<Button>().image.color = color;
 	    }
+	    else
+	    {
+            var color = this.GetComponent<Button>().image.color;
+            color.r = 1f;
+            color.b = 1f;
+            color.g = 1f;
+
+            this.GetComponent<Button>().image.color = color;
+	    }
 
         
 	}
 
     public void OnSelected()
     {
-        Debug.Log("Purchasable Tile Clicked!");
-
         var gameManager = GameObject.FindGameObjectWithTag("GameController");
         gameManager.GetComponent<GameManagerScript>().SelectedTile = TileInformation;
     }

@@ -20,17 +20,12 @@ public class PlaceNewTileScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("Stay Alive");
-
         var gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
 
         var tileInfo = GetComponent<TileScript>();
 
-        Debug.Log(tileInfo.X + ", " + tileInfo.Y);
-
         if (gameManager.TileGrid.CanAddTile(tileInfo.X, tileInfo.Y) && gameManager.SelectedTile != null && gameManager.SelectedTile.CanPurchase && gameManager.SelectedTile.CanAfford(gameManager))
         {
-            Debug.Log("Don't Not Stay Alive");
 
             gameManager.Souls += gameManager.SelectedTile.SoulsCost;
             gameManager.People += gameManager.SelectedTile.PeopleCost;

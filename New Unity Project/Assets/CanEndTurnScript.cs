@@ -16,7 +16,6 @@ public class CanEndTurnScript : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-
 	    GetComponent<Button>().interactable = GameManagerScript.CanEndTurn;
 	}
 }

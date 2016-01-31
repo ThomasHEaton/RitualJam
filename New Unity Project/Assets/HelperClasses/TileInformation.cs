@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Assets.Script;
+using UnityEngine.WSA;
 using Debug = UnityEngine.Debug;
 
 namespace Assets.HelperClasses
@@ -70,40 +72,59 @@ namespace Assets.HelperClasses
 
         public bool CanAfford(GameManagerScript gmScript)
         {
-            Debug.Log(gmScript.Not);
-
             if (SoulsCost < 0)
             {
-                if (!(gmScript.Souls + SoulsCost >= 0)) return false;
+                if (!(gmScript.Souls + SoulsCost >= 0))
+                {
+                    Debug.Log("Can't afford Souls");
+                    return false;
+                }
             }
 
             if (PeopleCost < 0)
             {
-                if (!(gmScript.People + PeopleCost >= 0)) return false;
+                if (!(gmScript.People + PeopleCost >= 0))
+                {
+                    Debug.Log("Can't afford People");
+                    return false;
+                }
             }
 
             if (MoneyCost < 0)
             {
-                if (!(gmScript.Money + MoneyCost >= 0)) return false;
+                if (!(gmScript.Money + MoneyCost >= 0))
+                {
+                    Debug.Log("Can't afford Money");
+                    return false;
+                }
             }
 
             if (InfCost < 0)
             {
-                if (!(gmScript.Inf + InfCost >= 0)) return false;
+                if (!(gmScript.Inf + InfCost >= 0))
+                {
+                    Debug.Log("Can't afford Influence");
+                    return false;
+                }
             }
 
             if (NotCost < 0)
             {
-                if (!(gmScript.Not + NotCost >= 0)) return false;
+                if (!(gmScript.Not + NotCost >= 0))
+                {
+                    Debug.Log("Can't afford Notoriety");
+                    return false;
+                }
             }
 
             return true;
-
         }
     }
 
+    [Serializable]
     public abstract class TileAction
     {
+        public abstract bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile);
         public abstract string ActionName();
         public abstract void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile);
     }
@@ -126,13 +147,62 @@ namespace Assets.HelperClasses
     [Serializable]
     public class CityInformation : TileInformation
     {
+        public bool BonusReceived;
+
         public CityInformation()
         {
             TileName = "City";
             TileDescription = "Have 10 more influence than notoriety generation around this tile to gain 10 followers.";
 
             SpriteName = "CityTile";
+
+            BonusReceived = false;
+
+            OnPlacement = new CityUnlocking(this);
         }   
+    }
+
+    [Serializable]
+    public class CityUnlocking : TileAction
+    {
+        private CityInformation _tile;
+
+        public CityUnlocking(CityInformation tile)
+        {
+            _tile = tile;
+        }
+
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return true;
+        }
+
+        public override string ActionName()
+        {
+            return "";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            if (_tile.BonusReceived) return;
+
+            var neighbours = grid.GetNeighbours(grid.TileList.First(t => t.TileInformation == _tile));
+
+            var influenceCount = 0;
+            foreach (var neighbour in neighbours)
+            {
+                influenceCount += neighbour.TileInformation.DeltaInf;
+                influenceCount -= neighbour.TileInformation.DeltaNot;
+            }
+
+            if (influenceCount >= 10)
+            {
+                Debug.Log("Got Bonus!!!!");
+
+                _tile.BonusReceived = true;
+                gameManager.People += 10;
+            }
+        }
     }
 
     [Serializable]
@@ -199,8 +269,14 @@ namespace Assets.HelperClasses
         }
     }
 
+    [Serializable]
     public class SacrficeAction1 : TileAction
     {
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return gameManager.People >= 1;
+        }
+
         public override string ActionName()
         {
             return "-Follower, +Souls, +Not";
@@ -216,8 +292,14 @@ namespace Assets.HelperClasses
             tile.AreActionsEnabled = false;
         }
     }
+    [Serializable]
     public class SacrficeAction2 : TileAction
     {
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return gameManager.People >= 2;
+        }
+
         public override string ActionName()
         {
             return "-2 Followers, +2 Souls, +Not";
@@ -233,8 +315,14 @@ namespace Assets.HelperClasses
             tile.AreActionsEnabled = false;
         }
     }
+    [Serializable]
     public class SacrficeAction3 : TileAction
     {
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return gameManager.People >= 3;
+        }
+
         public override string ActionName()
         {
             return "-3 Followers, +3 Souls, +Not";
@@ -251,8 +339,14 @@ namespace Assets.HelperClasses
         }
     }
 
+    [Serializable]
     public class RefreshActions : TileAction
     {
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return true;
+        }
+
         public override string ActionName()
         {
             return "";
@@ -314,9 +408,130 @@ namespace Assets.HelperClasses
             NotCost = 1;
 
             // TODO - Doubles the influence and money gained from the tiles around it.
+            OnPlacement = new AllBuildingBuff(this);
+
             OnTurnStart = new RefreshActions();
 
             TileAction1 = new SacrficeAction1();
+        }
+    }
+
+    public class AllBuildingBuff : TileAction
+    {
+        private TileInformation _tile;
+        public AllBuildingBuff(TileInformation tile)
+        {
+            _tile = tile;
+        }
+
+        public override bool CanUse(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            return true;
+        }
+
+        public override string ActionName()
+        {
+            return "";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            if (tile != _tile) return;
+
+            var TileList = grid.TileList;
+            var tileScript = grid.TileList.FirstOrDefault(x => x.TileInformation == tile);
+
+            if (tileScript.Y % 2 == 0)
+            {
+                var t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y - 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
+                if (TileList.Any(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+            }
+            else
+            {
+                var t = new Tuple { t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y - 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
+                if (TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 1, t2 = tileScript.Y + 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+                t = new Tuple { t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
+                if (TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1))
+                {
+                    var buffTile = TileList.First(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1);
+                    buffTile.TileInformation.DeltaInf *= 2;
+                    buffTile.TileInformation.DeltaMoney *= 2;
+                }
+            }
+
         }
     }
 

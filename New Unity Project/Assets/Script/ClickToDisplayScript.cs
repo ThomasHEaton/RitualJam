@@ -20,8 +20,12 @@ public class ClickToDisplayScript : MonoBehaviour {
     {
         var gameManager = GameObject.FindGameObjectWithTag("GameController");
 
-        Debug.Log(gameManager);
-        Debug.Log(GetComponent<TileScript>());
         gameManager.GetComponent<GameManagerScript>().SelectedTile = GetComponent<TileScript>().TileInformation;
+
+        var position = Camera.main.transform.position;
+        position.x = this.transform.position.x;
+        position.y = this.transform.position.y;
+        Camera.main.transform.position = position;
+
     }
 }

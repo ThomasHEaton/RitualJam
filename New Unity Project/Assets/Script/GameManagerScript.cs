@@ -3,6 +3,7 @@ using Assets.HelperClasses;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.WSA;
 
 namespace Assets.Script
 {
@@ -64,6 +65,10 @@ namespace Assets.Script
 
         public void EndTurn()
         {
+            Debug.Log("Ending Turn");
+
+            TileGrid.RemoveFadeTiles();
+
             var income = TileGrid.GetIncome();
 
             People += income.People;
@@ -191,13 +196,22 @@ namespace Assets.Script
             return null;
         }
 
-        public void OnTileAdded()
+        public void OnTileAdded(TileInformation tileInformation)
         {
             CanEndTurn = true;
 
             PurchasableTile1.gameObject.SetActive(false);
             PurchasableTile2.gameObject.SetActive(false);
             PurchasableTile3.gameObject.SetActive(false);
+
+            foreach (var tile in TileGrid.TileList)
+            {
+                if (tile.TileInformation.OnPlacement != null)
+                {
+                    tile.TileInformation.OnPlacement.Action(this, TileGrid, tileInformation);
+                }
+                
+            }
         }
     }
 }

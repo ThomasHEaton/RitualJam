@@ -25,7 +25,7 @@ public class TurnsRemainingUIController : MonoBehaviour
 //	    Debug.Log(GameManager.PaymentTurn);
 //	    Debug.Log(GameManager.CurrentTurnNumber + 1);
         
-	    TurnText.text = GameManager.Souls + " of " + GameManager.SoulsRequired + " in " +
+	    TurnText.text = GameManager.Souls + " of " + GameManager.SoulsRequired + " Souls in " +
 	                    (GameManager.PaymentTurn - GameManager.CurrentTurnNumber + 1) + " turns";
 	}
 }

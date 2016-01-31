@@ -28,10 +28,18 @@ public class PlaceNewTileScript : MonoBehaviour
 
         Debug.Log(tileInfo.X + ", " + tileInfo.Y);
 
-        if (gameManager.TileGrid.CanAddTile(tileInfo.X, tileInfo.Y))
+        if (gameManager.TileGrid.CanAddTile(tileInfo.X, tileInfo.Y) && gameManager.SelectedTile != null && gameManager.SelectedTile.CanPurchase)
         {
             Debug.Log("Don't Not Stay Alive");
-            gameManager.TileGrid.AddTile(tileInfo.X, tileInfo.Y, new BallPitInformation());
+
+            gameManager.Souls += gameManager.SelectedTile.SoulsCost;
+            gameManager.People += gameManager.SelectedTile.PeopleCost;
+            gameManager.Money += gameManager.SelectedTile.MoneyCost;
+            gameManager.Inf += gameManager.SelectedTile.InfCost;
+            gameManager.Not += gameManager.SelectedTile.NotCost;
+
+
+            gameManager.TileGrid.AddTile(tileInfo.X, tileInfo.Y, gameManager.SelectedTile);
         }
     }
 }

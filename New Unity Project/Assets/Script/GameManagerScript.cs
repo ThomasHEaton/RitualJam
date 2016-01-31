@@ -212,6 +212,9 @@ namespace Assets.Script
                 }
                 
             }
+
+            var income = TileGrid.GetIncome();
+            PreviousIncome = income;
         }
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.HelperClasses;
+using Assets.Script;
 using UnityEngine;
 
 public class GridScript : MonoBehaviour
 {
+    private GameManagerScript _gameManagerScript;
+
     public List<TileScript> TileList;
     public List<GameObject> FadeTileList; 
     public List<Tuple> OpenTiles; 
@@ -14,8 +17,10 @@ public class GridScript : MonoBehaviour
     public GameObject FadeTile;
     
 	// Use this for initialization
-	void Start () 
-    {
+	void Start ()
+	{
+	    _gameManagerScript = GetComponent<GameManagerScript>();
+
 	    TileList = new List<TileScript>();
         FadeTileList = new List<GameObject>();
             
@@ -102,6 +107,7 @@ public class GridScript : MonoBehaviour
 
         var tileScript = gameTile.GetComponent<TileScript>();
         tileScript.TileInformation = tileInformation;
+        tileScript.TileInformation.CanPurchase = false;
 
         tileScript.X = tileX;
         tileScript.Y = tileY;
@@ -111,6 +117,8 @@ public class GridScript : MonoBehaviour
         PlaceTile(tileScript, tileX, tileY);
 
         UpdateOpenTiles(tileScript);
+
+        _gameManagerScript.OnTileAdded();
     }
 
     private void UpdateOpenTiles(TileScript tileScript)
@@ -161,7 +169,6 @@ public class GridScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("You're Dead");
             return false;
         }
     }

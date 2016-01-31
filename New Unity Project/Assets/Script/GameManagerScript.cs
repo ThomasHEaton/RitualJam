@@ -53,6 +53,10 @@ namespace Assets.Script
             PurchasableTile2.TileInformation.CanPurchase = true;
             PurchasableTile3.TileInformation.CanPurchase = true;
 
+            PurchasableTile1.gameObject.SetActive(true);
+            PurchasableTile2.gameObject.SetActive(true);
+            PurchasableTile3.gameObject.SetActive(true);
+
             TileGrid.NextTurn();
         }
 
@@ -87,9 +91,26 @@ namespace Assets.Script
 
             var tiles = GetPurchasableTileInformation();
 
+            // Call all of the OnStartTurn on all of the tiles.
+            foreach (var tile in TileGrid.TileList)
+            {
+                if (tile.TileInformation.OnTurnStart != null)
+                {
+                    tile.TileInformation.OnTurnStart.Action(this, TileGrid, tile.TileInformation);
+                }
+            }
+
             PurchasableTile1.TileInformation = tiles[0];
             PurchasableTile2.TileInformation = tiles[1];
             PurchasableTile3.TileInformation = tiles[2];
+
+            PurchasableTile1.TileInformation.CanPurchase = true;
+            PurchasableTile2.TileInformation.CanPurchase = true;
+            PurchasableTile3.TileInformation.CanPurchase = true;
+
+            PurchasableTile1.gameObject.SetActive(true);
+            PurchasableTile2.gameObject.SetActive(true);
+            PurchasableTile3.gameObject.SetActive(true);
 
             TileGrid.NextTurn();
         }
@@ -141,6 +162,13 @@ namespace Assets.Script
             }
 
             return null;
+        }
+
+        public void OnTileAdded()
+        {
+            PurchasableTile1.gameObject.SetActive(false);
+            PurchasableTile2.gameObject.SetActive(false);
+            PurchasableTile3.gameObject.SetActive(false);
         }
     }
 }

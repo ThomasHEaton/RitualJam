@@ -26,7 +26,9 @@ namespace Assets.HelperClasses
         public int DeltaInf;
 
         public TileAction OnPlacement;
+        public TileAction OnTurnStart;
 
+        public bool AreActionsEnabled = true;
         public TileAction TileAction1;
         public TileAction TileAction2;
         public TileAction TileAction3;
@@ -34,15 +36,19 @@ namespace Assets.HelperClasses
         public string GetInformationText()
         {
             var costString = "";
-            costString += SoulsCost != 0 ? "Souls: " + SoulsCost + "\n": "";
-            costString += PeopleCost != 0 ? "Followers: " + PeopleCost + "\n" : "";
-            costString += MoneyCost != 0 ? "Money: " + MoneyCost + "\n" : "";
-            costString += InfCost != 0 ? "Influence: " + InfCost + "\n" : "";
-            costString += NotCost != 0 ? "Notority: " + NotCost + "\n" : "";
 
-            if (costString != "")
+            if (CanPurchase)
             {
-                costString = "Costs:\n\n" + costString + "\n\n";
+                costString += SoulsCost != 0 ? "Souls: " + SoulsCost + "\n" : "";
+                costString += PeopleCost != 0 ? "Followers: " + PeopleCost + "\n" : "";
+                costString += MoneyCost != 0 ? "Money: " + MoneyCost + "\n" : "";
+                costString += InfCost != 0 ? "Influence: " + InfCost + "\n" : "";
+                costString += NotCost != 0 ? "Notority: " + NotCost + "\n" : "";
+
+                if (costString != "")
+                {
+                    costString = "Costs:\n\n" + costString + "\n\n";
+                }
             }
 
             var perTurn = "";
@@ -63,7 +69,8 @@ namespace Assets.HelperClasses
 
     public abstract class TileAction
     {
-        public abstract void Action(GameManagerScript gameManager, GridScript grid, TileScript tile);
+        public abstract string ActionName();
+        public abstract void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile);
     }
 
     [Serializable]
@@ -150,6 +157,8 @@ namespace Assets.HelperClasses
 
             SpriteName = "SacrificeTable";
 
+            OnTurnStart = new RefreshActions();
+
             TileAction1 = new SacrficeAction1();
             TileAction2 = new SacrficeAction2();
             TileAction3 = new SacrficeAction3();
@@ -158,29 +167,68 @@ namespace Assets.HelperClasses
 
     public class SacrficeAction1 : TileAction
     {
-        public override void Action(GameManagerScript gameManager, GridScript grid, TileScript tile)
+        public override string ActionName()
         {
+            return "-Follower, +Souls, +Not";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            gameManager.Souls += 1;
+
             gameManager.People -= 1;
             gameManager.Not += 1;
+
+            tile.AreActionsEnabled = false;
         }
     }
     public class SacrficeAction2 : TileAction
     {
-        public override void Action(GameManagerScript gameManager, GridScript grid, TileScript tile)
+        public override string ActionName()
         {
+            return "-2 Followers, +2 Souls, +Not";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            gameManager.Souls += 2;
+
             gameManager.People -= 2;
             gameManager.Not += 1;
+
+            tile.AreActionsEnabled = false;
         }
     }
     public class SacrficeAction3 : TileAction
     {
-        public override void Action(GameManagerScript gameManager, GridScript grid, TileScript tile)
+        public override string ActionName()
         {
+            return "-3 Followers, +3 Souls, +Not";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            gameManager.Souls += 3;
+
             gameManager.People -= 3;
             gameManager.Not += 1;
+
+            tile.AreActionsEnabled = false;
         }
     }
 
+    public class RefreshActions : TileAction
+    {
+        public override string ActionName()
+        {
+            return "";
+        }
+
+        public override void Action(GameManagerScript gameManager, GridScript grid, TileInformation tile)
+        {
+            tile.AreActionsEnabled = true;
+        }
+    }
     [Serializable]
     public class BankInformation : TileInformation
     {
@@ -232,6 +280,8 @@ namespace Assets.HelperClasses
             NotCost = 1;
 
             // TODO - Doubles the influence and money gained from the tiles around it.
+            OnTurnStart = new RefreshActions();
+
             TileAction1 = new SacrficeAction1();
         }
     }

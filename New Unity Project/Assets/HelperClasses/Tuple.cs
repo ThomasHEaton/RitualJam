@@ -2,6 +2,7 @@
 
 namespace Assets.HelperClasses
 {
+    [Serializable]
     public class Tuple
     {
         public int t1;

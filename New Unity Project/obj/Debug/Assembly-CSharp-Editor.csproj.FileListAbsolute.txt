@@ -35,3 +35,4 @@ C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\Temp\bin\Debug\Unity
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp-Editor.dll
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp-Editor.pdb
+C:\Users\brett.o'donnell\Desktop\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache

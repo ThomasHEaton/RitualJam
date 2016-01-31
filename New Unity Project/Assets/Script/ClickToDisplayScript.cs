@@ -1,6 +1,7 @@
 ﻿using Assets.Script;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(TileScript))]
 public class ClickToDisplayScript : MonoBehaviour {
@@ -12,7 +13,7 @@ public class ClickToDisplayScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     void OnMouseDown()

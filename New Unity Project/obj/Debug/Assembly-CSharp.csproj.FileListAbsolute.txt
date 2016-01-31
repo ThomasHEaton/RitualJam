@@ -20,3 +20,4 @@ C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\Temp\bin\Debug\Unity
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp.dll
 C:\Users\Thomas.Eaton\Documents\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp.pdb
+C:\Users\brett.o'donnell\Desktop\RitualJam\New Unity Project\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache

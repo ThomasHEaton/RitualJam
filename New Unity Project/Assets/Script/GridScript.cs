@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Assets.HelperClasses;
 using Assets.Script;
@@ -129,36 +130,73 @@ public class GridScript : MonoBehaviour
             OpenTiles.Remove(placedTile);
         }
 
-        var t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y + 0 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
+        if (tileScript.Y % 2 == 0)
         {
-            OpenTiles.Add(t);
+            var t = new Tuple {t1 = tileScript.X - 1, t2 = tileScript.Y + 0};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X - 1, t2 = tileScript.Y - 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 0, t2 = tileScript.Y - 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 1, t2 = tileScript.Y + 0};
+            if (!TileList.Any(ts => ts.X == tileScript.X + 1 && ts.Y == tileScript.Y + 0) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 0, t2 = tileScript.Y + 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y + 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X - 1, t2 = tileScript.Y + 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
         }
-        t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y - 1 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
+        else
         {
-            OpenTiles.Add(t);
+            var t = new Tuple {t1 = tileScript.X - 1, t2 = tileScript.Y + 0};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y + 0) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 0, t2 = tileScript.Y - 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 1, t2 = tileScript.Y - 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 1, t2 = tileScript.Y + 0};
+            if (!TileList.Any(ts => ts.X == tileScript.X + 0 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 1, t2 = tileScript.Y + 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
+            t = new Tuple {t1 = tileScript.X + 0, t2 = tileScript.Y + 1};
+            if (!TileList.Any(ts => ts.X == tileScript.X - 1 && ts.Y == tileScript.Y - 1) && !OpenTiles.Contains(t))
+            {
+                OpenTiles.Add(t);
+            }
         }
-        t = new Tuple{ t1 = tileScript.X + 0, t2 = tileScript.Y - 1 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
-        {
-            OpenTiles.Add(t);
-        }
-        t = new Tuple{ t1 = tileScript.X + 1, t2 = tileScript.Y + 0 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
-        {
-            OpenTiles.Add(t);
-        }
-        t = new Tuple{ t1 = tileScript.X + 0, t2 = tileScript.Y + 1 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
-        {
-            OpenTiles.Add(t);
-        }
-        t = new Tuple{ t1 = tileScript.X - 1, t2 = tileScript.Y + 1 };
-        if (!TileList.Contains(tileScript) && !OpenTiles.Contains(t))
-        {
-            OpenTiles.Add(t);
-        }
+
     }
 
     public bool CanAddTile(int tileX, int tileY)

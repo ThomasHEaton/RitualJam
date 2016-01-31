@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using Assets.Script;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.HelperClasses
 {
@@ -65,6 +67,39 @@ namespace Assets.HelperClasses
 
             return costString + perTurn;
         }
+
+        public bool CanAfford(GameManagerScript gmScript)
+        {
+            Debug.Log(gmScript.Not);
+
+            if (SoulsCost < 0)
+            {
+                if (!(gmScript.Souls + SoulsCost >= 0)) return false;
+            }
+
+            if (PeopleCost < 0)
+            {
+                if (!(gmScript.People + PeopleCost >= 0)) return false;
+            }
+
+            if (MoneyCost < 0)
+            {
+                if (!(gmScript.Money + MoneyCost >= 0)) return false;
+            }
+
+            if (InfCost < 0)
+            {
+                if (!(gmScript.Inf + InfCost >= 0)) return false;
+            }
+
+            if (NotCost < 0)
+            {
+                if (!(gmScript.Not + NotCost >= 0)) return false;
+            }
+
+            return true;
+
+        }
     }
 
     public abstract class TileAction
@@ -83,7 +118,6 @@ namespace Assets.HelperClasses
 
             SpriteName = "StartingShack";
 
-            DeltaPeople = 3;
             DeltaMoney = 1;
             DeltaInf = 1;
         }
@@ -297,6 +331,7 @@ namespace Assets.HelperClasses
 
             SpriteName = "PoliceTile";
 
+            NotCost = -1;
             DeltaMoney = -3;
         }
     }
@@ -311,6 +346,7 @@ namespace Assets.HelperClasses
 
             SpriteName = "Church";
 
+            NotCost = -1;
             DeltaInf = -3;
         }
     }

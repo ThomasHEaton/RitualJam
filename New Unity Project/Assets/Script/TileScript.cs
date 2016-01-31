@@ -46,7 +46,7 @@ public class TileScript : MonoBehaviour
 
     public Income GetIncome()
     {
-        return new Income() { Soul = TileInformation.DeltaSouls, People = TileInformation.DeltaPeople, Inf = TileInformation.DeltaInf, Money = TileInformation.DeltaMoney, Not = TileInformation.DeltaNot };
+        return new Income() { Soul = TileInformation.DeltaSouls, People = TileInformation.DeltaInf, Inf = TileInformation.DeltaInf, Money = TileInformation.DeltaMoney, Not = TileInformation.DeltaNot };
     }
 
     void PlaceTile()

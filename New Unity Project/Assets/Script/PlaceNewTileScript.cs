@@ -28,7 +28,7 @@ public class PlaceNewTileScript : MonoBehaviour
 
         Debug.Log(tileInfo.X + ", " + tileInfo.Y);
 
-        if (gameManager.TileGrid.CanAddTile(tileInfo.X, tileInfo.Y) && gameManager.SelectedTile != null && gameManager.SelectedTile.CanPurchase)
+        if (gameManager.TileGrid.CanAddTile(tileInfo.X, tileInfo.Y) && gameManager.SelectedTile != null && gameManager.SelectedTile.CanPurchase && gameManager.SelectedTile.CanAfford(gameManager))
         {
             Debug.Log("Don't Not Stay Alive");
 

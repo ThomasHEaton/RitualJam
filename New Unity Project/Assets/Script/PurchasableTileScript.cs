@@ -35,6 +35,16 @@ public class PurchasableTileScript : MonoBehaviour
 	        GetComponent<Button>().image.sprite = Resources.Load<Sprite>("Sprites/" + TileInformation.SpriteName);
 	    }
 
+        if (TileInformation != null && !TileInformation.CanAfford(_gameManager))
+	    {
+	        var color = this.GetComponent<Button>().image.color;
+	        color.r = 0.5f;
+	        color.b = 0.5f;
+	        color.g = 0.5f;
+
+	        this.GetComponent<Button>().image.color = color;
+	    }
+
         
 	}
 

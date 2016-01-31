@@ -14,8 +14,8 @@ namespace Assets.Script
 
         public int Souls = 0;
 
-        public int People = 0;
-        public int Money = 0;
+        public int People = 3;
+        public int Money = 1;
         public int Not = 0;
         public int Inf = 0;
 
@@ -33,6 +33,8 @@ namespace Assets.Script
         public PurchasableTileScript PurchasableTile3;
 
         public List<TileInformation> PurchasableTiles;
+
+        public bool CanEndTurn = true;
 
         public void Start()
         {
@@ -120,6 +122,31 @@ namespace Assets.Script
             var tileInfo = new TileInformation[3];
             var listArray = new List<int> { 0, 1, 2, 3, 4, 5 };
 
+            if (Not > 3)
+            {
+                var Percentage = Not - 3;
+
+                Percentage *= 10;
+
+                var chance = Random.Range(0, 100);
+
+                if (chance < Percentage)
+                {
+                    var building = Random.Range(0, 2);
+
+                    if (building == 0)
+                    {
+                        return new[] { new PoliceStationInformation(), new PoliceStationInformation(), new PoliceStationInformation()};
+                        CanEndTurn = false;
+                    }
+                    else
+                    {
+                        return new[] { new ChurchInformation(), new ChurchInformation(), new ChurchInformation() };
+                        CanEndTurn = false;
+                    }
+                }
+            }
+
             var value1 = Random.Range(0, listArray.Count);
             tileInfo[0] = GetTileFromId(listArray[value1]);
             listArray.Remove(value1);
@@ -166,6 +193,8 @@ namespace Assets.Script
 
         public void OnTileAdded()
         {
+            CanEndTurn = true;
+
             PurchasableTile1.gameObject.SetActive(false);
             PurchasableTile2.gameObject.SetActive(false);
             PurchasableTile3.gameObject.SetActive(false);

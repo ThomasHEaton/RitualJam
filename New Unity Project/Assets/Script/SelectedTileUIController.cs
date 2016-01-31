@@ -30,23 +30,23 @@ public class SelectedTileUIController : MonoBehaviour
             TileDescriptionText.text = GameManager.SelectedTile.TileDescription;
             InformationText.text = GameManager.SelectedTile.GetInformationText();
 
-	        if (GameManager.SelectedTile.TileAction1 != null && GameManager.SelectedTile.AreActionsEnabled)
+            if (GameManager.SelectedTile.TileAction1 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase)
 	        {
 	            ActionButton1.GetComponentInChildren<Text>().text = GameManager.SelectedTile.TileAction1.ActionName();
 	        }
-            ActionButton1.gameObject.SetActive(GameManager.SelectedTile.TileAction1 != null && GameManager.SelectedTile.AreActionsEnabled);
+            ActionButton1.gameObject.SetActive(GameManager.SelectedTile.TileAction1 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase);
 
-            if (GameManager.SelectedTile.TileAction2 != null && GameManager.SelectedTile.AreActionsEnabled)
+            if (GameManager.SelectedTile.TileAction2 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase)
             {
                 ActionButton2.GetComponentInChildren<Text>().text = GameManager.SelectedTile.TileAction2.ActionName();
             }
-            ActionButton2.gameObject.SetActive(GameManager.SelectedTile.TileAction2 != null && GameManager.SelectedTile.AreActionsEnabled);
+            ActionButton2.gameObject.SetActive(GameManager.SelectedTile.TileAction2 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase);
 
-            if (GameManager.SelectedTile.TileAction3 != null && GameManager.SelectedTile.AreActionsEnabled)
+            if (GameManager.SelectedTile.TileAction3 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase)
             {
                 ActionButton3.GetComponentInChildren<Text>().text = GameManager.SelectedTile.TileAction3.ActionName();
             }
-            ActionButton3.gameObject.SetActive(GameManager.SelectedTile.TileAction3 != null && GameManager.SelectedTile.AreActionsEnabled);
+            ActionButton3.gameObject.SetActive(GameManager.SelectedTile.TileAction3 != null && GameManager.SelectedTile.AreActionsEnabled && !GameManager.SelectedTile.CanPurchase);
 	    }
 	}
 

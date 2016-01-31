@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.HelperClasses;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
-using UnityEngine.WSA;
 
 namespace Assets.Script
 {

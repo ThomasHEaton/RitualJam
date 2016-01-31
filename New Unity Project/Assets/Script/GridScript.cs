@@ -63,6 +63,10 @@ public class GridScript : MonoBehaviour
         var fadeTile = (GameObject)Instantiate(FadeTile, new Vector3(GetTileInUnityPosition(tileLocation.t1, tileLocation.t2).t1,
             GetTileInUnityPosition(tileLocation.t1, tileLocation.t2).t2, 0), Quaternion.identity);
 
+        var tileInfo = fadeTile.GetComponent<TileScript>();
+        tileInfo.X = tileLocation.t1;
+        tileInfo.Y = tileLocation.t2;
+
         FadeTileList.Add(fadeTile);
         
     }
@@ -151,12 +155,13 @@ public class GridScript : MonoBehaviour
 
     public bool CanAddTile(int tileX, int tileY)
     {
-        if (OpenTiles.Contains(new Tuple{ t1 = tileX, t2 = tileY }))
+        if (OpenTiles.Contains(new Tuple(){t1 = tileX, t2 = tileY}))
         {
             return true;
         }
         else
         {
+            Debug.Log("You're Dead");
             return false;
         }
     }

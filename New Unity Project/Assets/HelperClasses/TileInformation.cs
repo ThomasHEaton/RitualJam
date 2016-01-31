@@ -4,10 +4,14 @@ using Assets.Script;
 namespace Assets.HelperClasses
 {
     [Serializable]
-    public abstract class TileInformation
+    public class TileInformation
     {
         public string TileName;
         public string TileDescription;
+
+        public string SpriteName;
+
+        public bool CanPurchase;
 
         public int SoulsCost;
         public int PeopleCost;
@@ -26,6 +30,35 @@ namespace Assets.HelperClasses
         public TileAction TileAction1;
         public TileAction TileAction2;
         public TileAction TileAction3;
+
+        public string GetInformationText()
+        {
+            var costString = "";
+            costString += SoulsCost != 0 ? "Souls: " + SoulsCost + "\n": "";
+            costString += PeopleCost != 0 ? "Followers: " + PeopleCost + "\n" : "";
+            costString += MoneyCost != 0 ? "Money: " + MoneyCost + "\n" : "";
+            costString += InfCost != 0 ? "Influence: " + InfCost + "\n" : "";
+            costString += NotCost != 0 ? "Notority: " + NotCost + "\n" : "";
+
+            if (costString != "")
+            {
+                costString = "Costs:\n\n" + costString + "\n\n";
+            }
+
+            var perTurn = "";
+            perTurn += DeltaSouls != 0 ? "Souls: " + DeltaSouls + "\n" : "";
+            perTurn += DeltaPeople != 0 ? "Followers: " + DeltaPeople + "\n" : "";
+            perTurn += DeltaMoney != 0 ? "Money: " + DeltaMoney + "\n" : "";
+            perTurn += DeltaInf != 0 ? "Influence: " + DeltaInf + "\n" : "";
+            perTurn += DeltaNot != 0 ? "Notority: " + DeltaNot + "\n" : "";
+
+            if (perTurn != "")
+            {
+                perTurn = "Per Turn:\n\n" + perTurn;
+            }
+
+            return costString + perTurn;
+        }
     }
 
     public abstract class TileAction
@@ -33,6 +66,7 @@ namespace Assets.HelperClasses
         public abstract void Action(GameManagerScript gameManager, GridScript grid, TileScript tile);
     }
 
+    [Serializable]
     public class StartingLocation : TileInformation
     {
         public StartingLocation()
@@ -40,23 +74,27 @@ namespace Assets.HelperClasses
             TileName = "Starting Location";
             TileDescription = "A tiny shack in the woods";
 
+            SpriteName = "StartingShack";
+
             DeltaPeople = 3;
             DeltaMoney = 1;
             DeltaInf = 1;
         }
     }
 
+    [Serializable]
     public class CityInformation : TileInformation
     {
         public CityInformation()
         {
             TileName = "City";
-            TileDescription = "10 more influence than notoriety to gain 10 followers.";
+            TileDescription = "Have 10 more influence than notoriety generation around this tile to gain 10 followers.";
 
-
+            SpriteName = "CityTile";
         }   
     }
 
+    [Serializable]
     public class KoolaidStandInformation : TileInformation
     {
         public KoolaidStandInformation()
@@ -64,11 +102,14 @@ namespace Assets.HelperClasses
             TileName = "Koolaid Stand";
             TileDescription = "Little Billy has a great business idea and just rolled with it.";
 
+            SpriteName = "LemonTileAlt";
+
             PeopleCost = -1;
             DeltaMoney = 2;
         }
     }
 
+    [Serializable]
     public class KittyHospitalInformation : TileInformation
     {
         public KittyHospitalInformation()
@@ -76,12 +117,15 @@ namespace Assets.HelperClasses
             TileName = "Kitty Hospital";
             TileDescription = "The famous debate of Save the Animals or Kill the Animals.";
 
+            SpriteName = "KittyHospitalTile";
+
             MoneyCost = -4;
             DeltaMoney = -1;
             DeltaInf = 3;
         }
     }
 
+    [Serializable]
     public class BallPitInformation : TileInformation
     {
         public BallPitInformation()
@@ -89,17 +133,22 @@ namespace Assets.HelperClasses
             TileName = "Ball Pit";
             TileDescription = "Seriously?";
 
+            SpriteName = "BallpitTile";
+
             MoneyCost = -2;
             DeltaInf = 1;
         }
     }
 
+    [Serializable]
     public class SacrificingTableInformation : TileInformation
     {
         public SacrificingTableInformation()
         {
             TileName = "Sacrifice Table";
             TileDescription = "Kill people to save the human race!";
+
+            SpriteName = "SacrificeTable";
 
             TileAction1 = new SacrficeAction1();
             TileAction2 = new SacrficeAction2();
@@ -132,12 +181,15 @@ namespace Assets.HelperClasses
         }
     }
 
+    [Serializable]
     public class BankInformation : TileInformation
     {
         public BankInformation()
         {
             TileName = "Bank";
             TileDescription = "Too big to fail?";
+
+            SpriteName = "BankTile";
 
             MoneyCost = -5;
             PeopleCost = -2;
@@ -147,12 +199,15 @@ namespace Assets.HelperClasses
         }
     }
 
+    [Serializable]
     public class PRFirmInformation : TileInformation
     {
         public PRFirmInformation()
         {
             TileName = "PR Firm";
             TileDescription = "You're never going to be able to pay these guys enough";
+
+            SpriteName = "PRFirmTile";
 
             MoneyCost = -4;
             PeopleCost = -1;
@@ -162,12 +217,15 @@ namespace Assets.HelperClasses
         }
     }
 
+    [Serializable]
     public class TempleInformation : TileInformation
     {
         public TempleInformation()
         {
             TileName = "Temple";
             TileDescription = "";
+
+            SpriteName = "Temple";
 
             MoneyCost = -8;
             PeopleCost = -1;
@@ -179,6 +237,7 @@ namespace Assets.HelperClasses
     }
 
     // Forced Buildings
+    [Serializable]
     public class PoliceStationInformation : TileInformation
     {
         public PoliceStationInformation()
@@ -186,16 +245,21 @@ namespace Assets.HelperClasses
             TileName = "Police Station";
             TileDescription = "You've acquired too much notority and they've set up a station in your district.  Get it down or there will be more.";
 
+            SpriteName = "PoliceTile";
+
             DeltaMoney = -3;
         }
     }
 
+    [Serializable]
     public class ChurchInformation : TileInformation
     {
         public ChurchInformation()
         {
             TileName = "Church";
             TileDescription = "You've acquired too much notority and they've set up a church in your district.  Get it down or there will be more.";
+
+            SpriteName = "Church";
 
             DeltaInf = -3;
         }

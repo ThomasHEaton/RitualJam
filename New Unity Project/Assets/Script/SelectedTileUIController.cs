@@ -10,6 +10,7 @@ public class SelectedTileUIController : MonoBehaviour
     public GameManagerScript GameManager;
     public Text TileText;
     public Text TileDescriptionText;
+    public Text InformationText;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,7 @@ public class SelectedTileUIController : MonoBehaviour
 	    {
 	        TileText.text = GameManager.SelectedTile.TileName;
             TileDescriptionText.text = GameManager.SelectedTile.TileDescription;
+            InformationText.text = GameManager.SelectedTile.GetInformationText();
 	    }
 
 

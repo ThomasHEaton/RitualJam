@@ -29,7 +29,14 @@ public class TileScript : MonoBehaviour
     public TileInformation TileInformation;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
+	    if (TileInformation != null && TileInformation.SpriteName != null && TileInformation.SpriteName != "")
+	    {
+            var sprite = Resources.Load<Sprite>("Sprites/" + TileInformation.SpriteName);
+            GetComponent<SpriteRenderer>().sprite = sprite;
+	    }
+
 	}
 	
 	// Update is called once per frame
